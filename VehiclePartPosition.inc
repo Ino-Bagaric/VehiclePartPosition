@@ -57,9 +57,8 @@ stock GetXYZOfVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:o
     #if defined COLANDREAS
         new Float:cz;
     #endif
-    new Float:X, Float:Y, Float:Z, Float:A, Float:RX, Float:RY, Float:RZ;
+    new Float:X, Float:Y, Float:Z, Float:A;
     GetVehiclePos(vehicleid, x, y, z);
-    GetVehicleRotation(vehicleid, RX, RY, RZ);
     GetVehicleZAngle(vehicleid, A);
 
     
