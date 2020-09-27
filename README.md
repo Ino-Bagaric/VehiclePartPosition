@@ -1,7 +1,7 @@
 # VehiclePartPosition - SAMP
 
 ## GetPosNearVehiclePart ##
-Use this function to obtain the position in the world of a certain part of the vehicle, being able to define a distance between the part of the vehicle and the position in the world. You can use it to create a 3D text, checkpoint, pickup or object in that position
+Use this function to obtain the position in the world of a certain part of the vehicle, being able to define a distance between the part of the vehicle and the position in the world. You can use it to create a 3D text, checkpoint, pickup or object in that position.
 
 ## GetVehiclePartPos ##
 Use this function to obtain the position of a specific part of the vehicle. You can use it to attach 3D text or an object.
