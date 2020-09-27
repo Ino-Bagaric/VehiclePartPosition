@@ -2,37 +2,50 @@
 ---------------------------------------
 
 	VehiclePartPosition	
-	@author: Ino
-	@version: 1.0.0
+	@author: Ino / Walter-Correa
+	@version: 2.0.0
 	@release: 30/10/2016
-	@build: 2	
+	@build: 3	
 	@download: github.com/Ino42O/VehiclePartPosition
 
 ---------------------------------------
 
 	Functions list:
 
-		* GetXYZOfVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5);
+	* GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5); - To get the position in the world
+	* GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z); - To get the position in the vehicle
  	
 
 
  	Changelog:
 
- 		30-10-2016:
- 			* Initial release
+ 	30-10-2016:
+ 	* Initial release
 
-        31-10-2016:
-            * Support ColAndreas to get more informations if vehicle is not on flat ground
+	31-10-2016:
+        * Support ColAndreas to get more informations if vehicle is not on flat ground
+	
+	27-09-2020:
+        * Added new vehicle parts
+	* General code improvements
+	* Renamed GetXYZOfVehiclePart to GetPosNearVehiclePart
+	* Added GetVehiclePartPos
  		
 
 
- 	Available types:
- 		* VEHICLE_PART_RFTIRE
-		* VEHICLE_PART_LFTIRE
-		* VEHICLE_PART_RRTIRE
-		* VEHICLE_PART_LRTIRE
-		* VEHICLE_PART_HOOD
-		* VEHICLE_PART_TRUNK
+ 	Available part types:
+	
+ 	* VEH_PART_FTIRE - Front Tire - Bikes
+ 	* VEH_PART_RTIRE - Rear Tire - Bikes
+ 	* VEH_PART_RFTIRE - Right Front Tire
+ 	* VEH_PART_LFTIRE - Left Front Tire
+ 	* VEH_PART_RRTIRE - Right Rear Tire
+ 	* VEH_PART_LRTIRE - Left Rear Tire
+ 	* VEH_PART_RMTIRE - Right Mid Tire
+ 	* VEH_PART_LMTIRE - Left Mid Tire
+ 	* VEH_PART_HOOD - Hood
+ 	* VEH_PART_TRUNK - Trunk
+ 	* VEH_PART_PCAP - Petrol Cap
 
 ---------------------------------------
 */
@@ -42,112 +55,230 @@
 
 #define _INC_VEHPARTS
 
+#define VEH_PART_FTIRE 	1
+#define VEH_PART_RTIRE 	2
+#define VEH_PART_RFTIRE 3
+#define VEH_PART_LFTIRE 4
+#define VEH_PART_RRTIRE 5
+#define VEH_PART_LRTIRE 6
+#define VEH_PART_RMTIRE 7
+#define VEH_PART_LMTIRE 8
+#define VEH_PART_HOOD 	9
+#define VEH_PART_TRUNK 	10
+#define VEH_PART_PCAP 	11
 
-#define VEHICLE_PART_RFTIRE 	(1)
-#define VEHICLE_PART_LFTIRE 	(2)
-#define VEHICLE_PART_RRTIRE 	(3)
-#define VEHICLE_PART_LRTIRE 	(4)
-#define VEHICLE_PART_HOOD 		(5)
-#define VEHICLE_PART_TRUNK 		(6)
-
-
-
-stock GetXYZOfVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5)
+stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5)
 {
-    #if defined COLANDREAS
-        new Float:cz;
-    #endif
-    new Float:X, Float:Y, Float:Z, Float:A;
-    GetVehiclePos(vehicleid, x, y, z);
-    GetVehicleZAngle(vehicleid, A);
+	#if defined COLANDREAS
+	new Float:cz;
+	#endif
 
-    
+	new Float:X,Float:Y,Float:Z,Float:A,
+	cap = GetVehiclePetrolCapSide(vehicleid);
+	GetVehiclePos(vehicleid, x, y, z);
+	GetVehicleZAngle(vehicleid, A);
 
-    switch(part)
-    {
-        case VEHICLE_PART_RFTIRE: // Right Front tire
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+	switch(part)
+	{
+		case VEH_PART_FTIRE: // Front tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			x += (X+offset)*floatsin(-A,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_RTIRE: // Rear tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			x += (X+offset)*floatsin(-A+180.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+180.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_RFTIRE: // Right Front tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_LFTIRE: // Left Front tire
+		{
+			
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_RRTIRE: // Right Rear tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_LRTIRE: // Left Rear tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_RMTIRE: // Right Mid tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
+			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_LMTIRE: // Left Mid tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
+			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_HOOD:// In Front
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
+			x += (Y/2.0+offset) * floatsin(-A,degrees);
+			y += (Y/2.0+offset) * floatcos(-A,degrees);
+		}
+		case VEH_PART_TRUNK:// Behind
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
+			x += (Y/2.0+offset) * floatsin(-A+180,degrees);
+			y += (Y/2.0+offset) * floatcos(-A+180,degrees);
+		}
+		case VEH_PART_PCAP:
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, X, Y, Z);
+			if(cap == 1) X += offset;
+			if(cap == 2) X -= offset;
+			if(cap == 3) Y -= offset;
+			if(cap == 4) Y += offset+0.5;
+			x = floatsin(360-A,degrees)*Y+floatcos(360-A,degrees)*X+x;
+			y = floatcos(360-A,degrees)*Y-floatsin(360-A,degrees)*X+y;
+			z += Z;
+		}
+	}
+	#if defined COLANDREAS
+	CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
+	if (cz != 0.0) z = cz + offset;
+	#endif
+}
 
-            x += ( ( (X + offset) * floatsin( -A + 90.0, degrees ) ) + ( ( Y * floatsin( -A, degrees ) ) ) );
-            y += ( ( (X + offset) * floatcos( -A + 90.0, degrees ) ) + ( ( Y * floatcos( -A, degrees ) ) ) );
+stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
+{
+	new Float:X,Float:Y,Float:Z,Float:vx,
+	Float:vy,Float:vz,Float:px,Float:py,Float:a;
+	GetVehiclePos(vehicleid, vx, vy, vz);
+	GetVehicleZAngle(vehicleid, a);
+	
+	switch(part)
+	{
+		case VEH_PART_FTIRE: // Front tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, x, y, z);
+		}
+		case VEH_PART_RTIRE: // Rear tire
+		{
+			
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, x, y, z);
+		}
+		case VEH_PART_RFTIRE: // Right Front tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a+90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a+90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_LFTIRE: // Left Front tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a-90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a-90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_RRTIRE: // Right Rear tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a+90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a+90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_LRTIRE: // Left Rear tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a-90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a-90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_RMTIRE: // Right Mid tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a+90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a+90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_LMTIRE: // Left Mid tire
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a-90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a-90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_HOOD:// In Front
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
+			px = vx, py = vy;
+			px += ((Y/2.0) * floatsin(-a,degrees));
+			py += ((Y/2.0) * floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees)-0.2;
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
+			z = (Z+0.5);
+		}
+		case VEH_PART_TRUNK:// Behind
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
+			px = vx, py = vy;
+			px += ((Y/2.0) * floatsin(-a+180.0,degrees));
+			py += ((Y/2.0) * floatcos(-a+180.0,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees)+0.3;
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
+			z = (Z+0.5);
+		}
+		case VEH_PART_PCAP:
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, x, y, z);
+		}
+	}
+}
 
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-        case VEHICLE_PART_LFTIRE: // Left Front tire
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
-
-            x += ( ( (X + offset) * floatsin( -A - 90.0, degrees ) ) + ( ( Y * floatsin( -A, degrees ) ) ) );
-            y += ( ( (X + offset) * floatcos( -A - 90.0, degrees ) ) + ( ( Y * floatcos( -A, degrees ) ) ) );
-
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-        case VEHICLE_PART_RRTIRE: // Right Rear tire
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
-
-            x += ( ( (X + offset) * floatsin( -A + 90.0, degrees ) ) + ( ( Y * floatsin( -A, degrees ) ) ) );
-            y += ( ( (X + offset) * floatcos( -A + 90.0, degrees ) ) + ( ( Y * floatcos( -A, degrees ) ) ) );
-
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-        case VEHICLE_PART_LRTIRE: // Left Rear tire
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
-
-            x += ( ( (X + offset) * floatsin( -A - 90.0, degrees ) ) + ( ( Y * floatsin( -A, degrees ) ) ) );
-            y += ( ( (X + offset) * floatcos( -A - 90.0, degrees ) ) + ( ( Y * floatcos( -A, degrees ) ) ) );
-
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-        case VEHICLE_PART_HOOD: // In Front
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
-
-            x += ( (Y / 2.0 + offset) * floatsin( -A, degrees ) );
-            y += ( (Y / 2.0 + offset) * floatcos( -A, degrees ) );
-
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-        case VEHICLE_PART_TRUNK: // Behind
-        {
-            GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
-
-            x += ( (Y / 2.0 + offset) * floatsin( -A + 180, degrees ) );
-            y += ( (Y / 2.0 + offset) * floatcos( -A + 180, degrees ) );
-
-            #if defined COLANDREAS
-                CA_RayCastLine(x, y, z, x, y, z + 5.0, cz, cz, cz);
-
-                if (cz != 0.0)
-                    z = cz + offset;
-            #endif
-        }
-    }
+stock GetVehiclePetrolCapSide(vehicleid)
+{
+	new model = GetVehicleModel(vehicleid);
+	switch(model)
+	{
+		case 401,402,411,429,451,456,478,482,483,486,489,490,495,496,505,506,514,
+		518,524,533,541,546,554,557,560..562,565,566,579,580,585,589,599,600,602,603: return 1;//Right
+		case 400,403..405,408..410,413..416,418..423,426,427,431,433,434,436..440,
+		442,443,445,455,458,459,467,470,475,477,479,480,485,491,492,494,498..500,
+		502..504,507,508,515..517,525..529,534..536,540,542..544,547,549..552,
+		555,558,559,568,573,574,578,582,583,587,588,596..598,601,605,609: return 2;//Left
+		case 407,412,428,444,466,545,567,572,575,576,604: return 3;//Back
+		case 424: return 4;//Front
+	}
+	return 0;//No Cap - Center
 }
