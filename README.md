@@ -6,8 +6,23 @@ Use this function to obtain the position in the world of a certain part of the v
 ## GetVehiclePartPos ##
 Use this function to obtain the position of a specific part of the vehicle. You can use it to attach 3D text or an object.
 
-Example:
+## IsPlayerNearVehiclePart ##
+Use this function to detect if a player is near a vehicle part.
 
+## SetPlayerNearVehiclePart ##
+Use this function to teleport a player to the front a vehicle part.
+
+## GetVehiclePartName ##
+Use this function to get the vehicle part names.
+
+Examples:
+
+	new vehid=1,string[30]; //Change the vehid
+	SetPlayerNearVehiclePart(playerid, vehid, VEH_PART_PCAP);
+	format(string, sizeof(string),"~w~%s", GetVehiclePartName(VEH_PART_PCAP));
+	GameTextForPlayer(playerid, string, 5000, 4);
+	SetCameraBehindPlayer(playerid);
+	
 	new Float:pos[3],Float:a,mechanic,Text3D:vtext;
 	new engine, lights, alarm, doors, bonnet, boot, objective;
 	GetVehicleParamsEx(GetPlayerVehicleID(playerid), engine, lights, alarm, doors, bonnet, boot, objective);
