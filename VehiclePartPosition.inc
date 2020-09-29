@@ -5,15 +5,18 @@
 	@author: Ino / Walter-Correa
 	@version: 2.0.0
 	@release: 30/10/2016
-	@build: 3	
+	@build: 4	
 	@download: github.com/Ino42O/VehiclePartPosition
 
 ---------------------------------------
 
 	Functions list:
 
-	* GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5); - To get the position in the world
-	* GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z); - To get the position in the vehicle
+	* GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5); - To get the position in the world.
+	* GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z); - To get the position in the vehicle.
+	* IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 1.0, Float:offset = 0.0); - Check if the player is near of a vehicle part.
+	* SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5); - Teleports a player to the front of a part of the vehicle.
+	* GetVehiclePartName(part); - Return the vehicle part name.
  	
 
 
@@ -30,6 +33,11 @@
 	* General code improvements
 	* Renamed GetXYZOfVehiclePart to GetPosNearVehiclePart
 	* Added GetVehiclePartPos
+	
+	29-09-2020:
+	* Added IsPlayerNearVehiclePart
+	* Added SetPlayerNearVehiclePart
+	* Added GetVehiclePartName
  		
 
 
@@ -145,7 +153,7 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, X, Y, Z);
 			if(cap == 1) X += offset;
-			if(cap == 2) X -= offset;
+			if(!cap || cap == 2) X -= offset;
 			if(cap == 3) Y -= offset;
 			if(cap == 4) Y += offset+0.5;
 			x = floatsin(360-A,degrees)*Y+floatcos(360-A,degrees)*X+x;
@@ -266,6 +274,23 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 	}
 }
 
+stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
+{
+	new Float:pos[3],Float:a = GetVehiclePartAngle(vehicleid, part);
+	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
+	new_SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	SetPlayerFacingAngle(playerid, a);
+	return 1;
+}
+
+stock IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 1.0, Float:offset = 0.0)
+{
+	new Float:pos[3];
+	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
+	if(IsPlayerInRangeOfPoint(playerid, radius, pos[0], pos[1], pos[2])) return 1;
+	return 0;
+}
+
 stock GetVehiclePetrolCapSide(vehicleid)
 {
 	new model = GetVehicleModel(vehicleid);
@@ -282,3 +307,43 @@ stock GetVehiclePetrolCapSide(vehicleid)
 	}
 	return 0;//No Cap - Center
 }
+
+stock GetVehiclePartName(part)
+{
+	new partname[25];
+	switch(part)
+	{
+		case VEH_PART_FTIRE: partname ="Front Tire";
+		case VEH_PART_RTIRE: partname ="Rear Tire";
+		case VEH_PART_RFTIRE: partname ="Right Front Tire";
+		case VEH_PART_LFTIRE: partname ="Left Front Tire";
+		case VEH_PART_RRTIRE: partname ="Right Rear Tire";
+		case VEH_PART_LRTIRE: partname ="Left Rear Tire";
+		case VEH_PART_RMTIRE: partname ="Right Mid Tire";
+		case VEH_PART_LMTIRE: partname ="Left Mid Tire";
+		case VEH_PART_HOOD: partname ="Hood";
+		case VEH_PART_TRUNK: partname ="Trunk";
+		case VEH_PART_PCAP: partname ="Petrol Cap";
+	}
+	return partname;
+}
+
+stock Float:GetVehiclePartAngle(vehicleid, part)
+{
+	new Float:a,cap = GetVehiclePetrolCapSide(vehicleid);
+	GetVehicleZAngle(vehicleid, a);
+	switch(part)
+	{
+		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;// Front tire
+		case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE: a += 90.0;// Right Front tire
+		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE: a -= 90.0;// Left Front tire
+		case VEH_PART_PCAP:
+		{
+			if(cap == 1) a += 90.0;
+			if(!cap || cap == 2) a -= 90.0;
+			if(cap == 4) a -= 180.0;
+		}
+	}
+	return a;
+}
+
