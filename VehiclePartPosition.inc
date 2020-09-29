@@ -278,7 +278,7 @@ stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
 {
 	new Float:pos[3],Float:a = GetVehiclePartAngle(vehicleid, part);
 	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
-	new_SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+	SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
 	SetPlayerFacingAngle(playerid, a);
 	return 1;
 }
