@@ -108,7 +108,6 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 		}
 		case VEH_PART_LFTIRE: // Left Front tire
 		{
-			
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
@@ -182,7 +181,6 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 		}
 		case VEH_PART_RTIRE: // Rear tire
 		{
-			
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, x, y, z);
 		}
 		case VEH_PART_RFTIRE: // Right Front tire
