@@ -269,6 +269,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 		case VEH_PART_PCAP:
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, x, y, z);
+			if(!GetVehiclePetrolCapSide(vehicleid)) y -= 2.0;
 		}
 	}
 }
