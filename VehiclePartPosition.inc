@@ -81,8 +81,7 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 	new Float:cz;
 	#endif
 
-	new Float:X,Float:Y,Float:Z,Float:A,
-	cap = GetVehiclePetrolCapSide(vehicleid);
+	new Float:X,Float:Y,Float:Z,Float:A;
 	GetVehiclePos(vehicleid, x, y, z);
 	GetVehicleZAngle(vehicleid, A);
 
@@ -151,6 +150,7 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 		case VEH_PART_PCAP:
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, X, Y, Z);
+			new cap = GetVehiclePetrolCapSide(vehicleid);
 			if(cap == 0) X -= offset+2.0,Y -= 2.0;
 			if(cap == 1) X += offset;
 			if(cap == 2) X -= offset;
