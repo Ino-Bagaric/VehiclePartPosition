@@ -331,7 +331,7 @@ stock GetVehiclePartName(part)
 
 stock Float:GetVehiclePartAngle(vehicleid, part)
 {
-	new Float:a,cap = GetVehiclePetrolCapSide(vehicleid);
+	new Float:a;
 	GetVehicleZAngle(vehicleid, a);
 	switch(part)
 	{
@@ -340,6 +340,7 @@ stock Float:GetVehiclePartAngle(vehicleid, part)
 		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE: a -= 90.0;// Left Front tire
 		case VEH_PART_PCAP:
 		{
+			new cap = GetVehiclePetrolCapSide(vehicleid);
 			if(cap == 1) a += 90.0;
 			if(!cap || cap == 2) a -= 90.0;
 			if(cap == 4) a -= 180.0;
