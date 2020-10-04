@@ -151,8 +151,9 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 		case VEH_PART_PCAP:
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, X, Y, Z);
+			if(cap == 0) X -= offset+2.0,Y -= 2.0;
 			if(cap == 1) X += offset;
-			if(!cap || cap == 2) X -= offset;
+			if(cap == 2) X -= offset;
 			if(cap == 3) Y -= offset;
 			if(cap == 4) Y += offset+0.5;
 			x = floatsin(360-A,degrees)*Y+floatcos(360-A,degrees)*X+x;
@@ -284,6 +285,7 @@ stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
 stock IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 1.0, Float:offset = 0.0)
 {
 	new Float:pos[3];
+	if(part == VEH_PART_PCAP && !GetVehiclePetrolCapSide(vehicleid)) radius += 1.0;
 	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
 	if(IsPlayerInRangeOfPoint(playerid, radius, pos[0], pos[1], pos[2])) return 1;
 	return 0;
@@ -297,9 +299,9 @@ stock GetVehiclePetrolCapSide(vehicleid)
 		case 401,402,411,429,451,456,478,482,483,486,489,490,495,496,505,506,514,
 		518,524,533,541,546,554,557,560..562,565,566,579,580,585,589,599,600,602,603: return 1;//Right
 		case 400,403..405,408..410,413..416,418..423,426,427,431,433,434,436..440,
-		442,443,445,455,458,459,467,470,475,477,479,480,485,491,492,494,498..500,
-		502..504,507,508,515..517,525..529,534..536,540,542..544,547,549..552,
-		555,558,559,568,573,574,578,582,583,587,588,596..598,601,605,609: return 2;//Left
+		442,443,445,448,455,458,459,461..463,467,468,470,471,475,477,479,480,485,491,492,494,
+		498..500,502..504,507,508,515..517,521..523,525..529,534..536,540,542..544,547,549..552,
+		555,558,559,568,571,573,574,578,581..583,586..588,596..598,601,605,609: return 2;//Left
 		case 407,412,428,444,466,545,567,572,575,576,604: return 3;//Back
 		case 424: return 4;//Front
 	}
