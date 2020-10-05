@@ -151,7 +151,7 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_PETROLCAP, X, Y, Z);
 			new cap = GetVehiclePetrolCapSide(vehicleid);
-			if(cap == 0) X -= offset+2.0,Y -= 2.0;
+			if(cap == 0) Y -= 2.0;
 			if(cap == 1) X += offset;
 			if(cap == 2) X -= offset;
 			if(cap == 3) Y -= offset;
@@ -283,10 +283,16 @@ stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
 	return 1;
 }
 
-stock IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 1.0, Float:offset = 0.0)
+stock IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 0.5, Float:offset = 0.0)
 {
 	new Float:pos[3];
-	if(part == VEH_PART_PCAP && !GetVehiclePetrolCapSide(vehicleid)) radius += 1.0;
+	if(part == VEH_PART_PCAP)
+	{
+		if(!GetVehiclePetrolCapSide(vehicleid) || GetVehicleModel(vehicleid) == 557 ||
+		GetVehicleModel(vehicleid) == 486) radius += 1.5;
+		if(GetVehicleModel(vehicleid) == 471 || GetVehicleModel(vehicleid) == 571) radius += 0.5;
+		if(GetVehicleModel(vehicleid) == 592) radius += 1.5;
+	}
 	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
 	if(IsPlayerInRangeOfPoint(playerid, radius, pos[0], pos[1], pos[2])) return 1;
 	return 0;
@@ -329,6 +335,7 @@ stock GetVehiclePartName(part)
 	return partname;
 }
 
+forward Float:GetVehiclePartAngle(vehicleid, part);
 stock Float:GetVehiclePartAngle(vehicleid, part)
 {
 	new Float:a;
@@ -342,7 +349,7 @@ stock Float:GetVehiclePartAngle(vehicleid, part)
 		{
 			new cap = GetVehiclePetrolCapSide(vehicleid);
 			if(cap == 1) a += 90.0;
-			if(!cap || cap == 2) a -= 90.0;
+			if(cap == 2) a -= 90.0;
 			if(cap == 4) a -= 180.0;
 		}
 	}
