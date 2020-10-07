@@ -274,6 +274,26 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 	}
 }
 
+stock Float:GetVehiclePartAngle(vehicleid, part)
+{
+	new Float:a;
+	GetVehicleZAngle(vehicleid, a);
+	switch(part)
+	{
+		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;// Front tire
+		case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE: a += 90.0;// Right Front tire
+		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE: a -= 90.0;// Left Front tire
+		case VEH_PART_PCAP:
+		{
+			new cap = GetVehiclePetrolCapSide(vehicleid);
+			if(cap == 1) a += 90.0;
+			if(cap == 2) a -= 90.0;
+			if(cap == 4) a -= 180.0;
+		}
+	}
+	return a;
+}
+
 stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
 {
 	new Float:pos[3],Float:a = GetVehiclePartAngle(vehicleid, part);
@@ -334,25 +354,3 @@ stock GetVehiclePartName(part)
 	}
 	return partname;
 }
-
-forward Float:GetVehiclePartAngle(vehicleid, part);
-stock Float:GetVehiclePartAngle(vehicleid, part)
-{
-	new Float:a;
-	GetVehicleZAngle(vehicleid, a);
-	switch(part)
-	{
-		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;// Front tire
-		case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE: a += 90.0;// Right Front tire
-		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE: a -= 90.0;// Left Front tire
-		case VEH_PART_PCAP:
-		{
-			new cap = GetVehiclePetrolCapSide(vehicleid);
-			if(cap == 1) a += 90.0;
-			if(cap == 2) a -= 90.0;
-			if(cap == 4) a -= 180.0;
-		}
-	}
-	return a;
-}
-
