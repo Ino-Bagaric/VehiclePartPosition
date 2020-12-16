@@ -305,13 +305,11 @@ stock SetPlayerNearVehiclePart(playerid, vehicleid, part, Float:offset = 0.5)
 
 stock IsPlayerNearVehiclePart(playerid, vehicleid, part, Float:radius = 0.5, Float:offset = 0.0)
 {
-	new Float:pos[3];
+	new Float:pos[3],model=GetVehicleModel(vehicleid);
 	if(part == VEH_PART_PCAP)
 	{
-		if(!GetVehiclePetrolCapSide(vehicleid) || GetVehicleModel(vehicleid) == 557 ||
-		GetVehicleModel(vehicleid) == 486) radius += 1.5;
-		if(GetVehicleModel(vehicleid) == 471 || GetVehicleModel(vehicleid) == 571) radius += 0.5;
-		if(GetVehicleModel(vehicleid) == 592) radius += 1.5;
+		if(!GetVehiclePetrolCapSide(vehicleid) || model == 557 || model == 486 || model == 592) radius += 1.5;
+		else if(model == 471 || model == 571) radius += 0.5;
 	}
 	GetPosNearVehiclePart(vehicleid, part, pos[0], pos[1], pos[2], offset);
 	if(IsPlayerInRangeOfPoint(playerid, radius, pos[0], pos[1], pos[2])) return 1;
