@@ -72,15 +72,15 @@ Examples:
   	CreateDynamicObject(1098, pos[0], pos[1], pos[2]-0.25, 0.0, 0.0, a);
 	
 	//Right Front Seat - Cars
-    	GetVehiclePartPos(GetPlayerVehicleID(playerid), VEH_PART_RFSEAT, pos[0], pos[1], pos[2]);
-    	vtext = Create3DTextLabel("Right Front Seat", 0xEEDD82FF, pos[0], pos[1], pos[2], 5.0, 0);
+	GetVehiclePartPos(GetPlayerVehicleID(playerid), VEH_PART_RFSEAT, pos[0], pos[1], pos[2]);
+	vtext = Create3DTextLabel("Right Front Seat", 0xEEDD82FF, pos[0], pos[1], pos[2], 5.0, 0);
  	Attach3DTextLabelToVehicle(vtext, GetPlayerVehicleID(playerid), pos[0], pos[1], pos[2]);
  	GetPosNearVehiclePart(GetPlayerVehicleID(playerid), VEH_PART_RFSEAT, pos[0], pos[1], pos[2],1.5);
 	CreateDynamicObject(1562, pos[0], pos[1], pos[2]-0.25, 0.0, 0.0, a-180.0);
 	
 	//Left Front Seat - Cars
-    	GetVehiclePartPos(GetPlayerVehicleID(playerid), VEH_PART_LFSEAT, pos[0], pos[1], pos[2]);
-    	vtext = Create3DTextLabel("Left Front Seat", 0xEEDD82FF, pos[0], pos[1], pos[2], 5.0, 0);
+	GetVehiclePartPos(GetPlayerVehicleID(playerid), VEH_PART_LFSEAT, pos[0], pos[1], pos[2]);
+	vtext = Create3DTextLabel("Left Front Seat", 0xEEDD82FF, pos[0], pos[1], pos[2], 5.0, 0);
  	Attach3DTextLabelToVehicle(vtext, GetPlayerVehicleID(playerid), pos[0], pos[1], pos[2]);
  	GetPosNearVehiclePart(GetPlayerVehicleID(playerid), VEH_PART_LFSEAT, pos[0], pos[1], pos[2],1.5);
 	CreateDynamicObject(1562, pos[0], pos[1], pos[2]-0.25, 0.0, 0.0, a-180.0);
