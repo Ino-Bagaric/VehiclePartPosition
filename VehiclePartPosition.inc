@@ -5,7 +5,7 @@
 	@author: Ino / Walter-Correa
 	@version: 2.0.0
 	@release: 30/10/2016
-	@build: 4	
+	@build: 5	
 	@download: github.com/Ino42O/VehiclePartPosition
 
 ---------------------------------------
@@ -38,6 +38,9 @@
 	* Added IsPlayerNearVehiclePart
 	* Added SetPlayerNearVehiclePart
 	* Added GetVehiclePartName
+	
+	27/10/2021:
+	* Added new vehicle parts 
  		
 
 
@@ -51,6 +54,10 @@
  	* VEH_PART_LRTIRE - Left Rear Tire
  	* VEH_PART_RMTIRE - Right Mid Tire
  	* VEH_PART_LMTIRE - Left Mid Tire
+	* VEH_PART_RFSEAT - Right Front Seat
+	* VEH_PART_LFSEAT - Left Front Seat
+	* VEH_PART_RRSEAT - Right Rear Seat
+	* VEH_PART_LRSEAT - Left Rear Seat
  	* VEH_PART_HOOD - Hood
  	* VEH_PART_TRUNK - Trunk
  	* VEH_PART_PCAP - Petrol Cap
@@ -63,17 +70,21 @@
 
 #define _INC_VEHPARTS
 
-#define VEH_PART_FTIRE 	1
-#define VEH_PART_RTIRE 	2
+#define VEH_PART_FTIRE 1
+#define VEH_PART_RTIRE 2
 #define VEH_PART_RFTIRE 3
 #define VEH_PART_LFTIRE 4
 #define VEH_PART_RRTIRE 5
 #define VEH_PART_LRTIRE 6
 #define VEH_PART_RMTIRE 7
 #define VEH_PART_LMTIRE 8
-#define VEH_PART_HOOD 	9
-#define VEH_PART_TRUNK 	10
-#define VEH_PART_PCAP 	11
+#define VEH_PART_RFSEAT 9
+#define VEH_PART_LFSEAT 10
+#define VEH_PART_RRSEAT 11
+#define VEH_PART_LRSEAT 12
+#define VEH_PART_HOOD 13
+#define VEH_PART_TRUNK 14
+#define VEH_PART_PCAP 15
 
 stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float:offset = 0.5)
 {
@@ -87,61 +98,85 @@ stock GetPosNearVehiclePart(vehicleid, part, &Float:x, &Float:y, &Float:z, Float
 
 	switch(part)
 	{
-		case VEH_PART_FTIRE: // Front tire
+		case VEH_PART_FTIRE://Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			x += (X+offset)*floatsin(-A,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_RTIRE: // Rear tire
+		case VEH_PART_RTIRE://Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
 			x += (X+offset)*floatsin(-A+180.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A+180.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_RFTIRE: // Right Front tire
+		case VEH_PART_RFTIRE://Right Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_LFTIRE: // Left Front tire
+		case VEH_PART_LFTIRE://Left Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_RRTIRE: // Right Rear tire
+		case VEH_PART_RRTIRE://Right Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
 			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_LRTIRE: // Left Rear tire
+		case VEH_PART_LRTIRE://Left Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
 			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_RMTIRE: // Right Mid tire
+		case VEH_PART_RMTIRE://Right Mid Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
 			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_LMTIRE: // Left Mid tire
+		case VEH_PART_LMTIRE://Left Mid Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
 			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
 			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
 		}
-		case VEH_PART_HOOD:// In Front
+		case VEH_PART_RFSEAT://Right Front Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_FRONTSEAT, X, Y, Z);
+			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_LFSEAT://Left Front Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_FRONTSEAT, X, Y, Z);
+			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_RRSEAT://Right Rear Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_REARSEAT, X, Y, Z);
+			x += (X+offset)*floatsin(-A+90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A+90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_LRSEAT://Left Rear Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_REARSEAT, X, Y, Z);
+			x += (X+offset)*floatsin(-A-90.0,degrees) + (Y*floatsin(-A,degrees));
+			y += (X+offset)*floatcos(-A-90.0,degrees) + (Y*floatcos(-A,degrees));
+		}
+		case VEH_PART_HOOD://In Front
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
 			x += (Y/2.0+offset) * floatsin(-A,degrees);
 			y += (Y/2.0+offset) * floatcos(-A,degrees);
 		}
-		case VEH_PART_TRUNK:// Behind
+		case VEH_PART_TRUNK://Behind
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
 			x += (Y/2.0+offset) * floatsin(-A+180,degrees);
@@ -173,18 +208,18 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 	Float:vy,Float:vz,Float:px,Float:py,Float:a;
 	GetVehiclePos(vehicleid, vx, vy, vz);
 	GetVehicleZAngle(vehicleid, a);
-	
+
 	switch(part)
 	{
-		case VEH_PART_FTIRE: // Front tire
+		case VEH_PART_FTIRE://Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, x, y, z);
 		}
-		case VEH_PART_RTIRE: // Rear tire
+		case VEH_PART_RTIRE://Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, x, y, z);
 		}
-		case VEH_PART_RFTIRE: // Right Front tire
+		case VEH_PART_RFTIRE://Right Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			px = vx, py = vy;
@@ -194,7 +229,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_LFTIRE: // Left Front tire
+		case VEH_PART_LFTIRE://Left Front Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			px = vx, py = vy;
@@ -204,7 +239,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_RRTIRE: // Right Rear tire
+		case VEH_PART_RRTIRE://Right Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
 			px = vx, py = vy;
@@ -214,7 +249,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_LRTIRE: // Left Rear tire
+		case VEH_PART_LRTIRE://Left Rear Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSREAR, X, Y, Z);
 			px = vx, py = vy;
@@ -224,7 +259,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_RMTIRE: // Right Mid tire
+		case VEH_PART_RMTIRE://Right Mid Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
 			px = vx, py = vy;
@@ -234,7 +269,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_LMTIRE: // Left Mid tire
+		case VEH_PART_LMTIRE://Left Mid Tire
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSMID, X, Y, Z);
 			px = vx, py = vy;
@@ -244,7 +279,47 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
 			z = Z;
 		}
-		case VEH_PART_HOOD:// In Front
+		case VEH_PART_RFSEAT://Right Front Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_FRONTSEAT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a+90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a+90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_LFSEAT://Left Front Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_FRONTSEAT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a-90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a-90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_RRSEAT://Right Rear Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_REARSEAT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a+90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a+90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_LRSEAT://Left Rear Seat
+		{
+			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_REARSEAT, X, Y, Z);
+			px = vx, py = vy;
+			px += (X*floatsin(-a-90.0,degrees)) + (Y*floatsin(-a,degrees));
+			py += (X*floatcos(-a-90.0,degrees)) + (Y*floatcos(-a,degrees));
+			x = (px-vx)*floatcos(a, degrees)+(py-vy)*floatsin(a, degrees);
+			y = -(px-vx)*floatsin(a, degrees)+(py-vy)*floatcos(a, degrees);
+			z = Z;
+		}
+		case VEH_PART_HOOD://In Front
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
 			px = vx, py = vy;
@@ -255,7 +330,7 @@ stock GetVehiclePartPos(vehicleid, part, &Float:x, &Float:y, &Float:z)
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_WHEELSFRONT, X, Y, Z);
 			z = (Z+0.5);
 		}
-		case VEH_PART_TRUNK:// Behind
+		case VEH_PART_TRUNK://Behind
 		{
 			GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, X, Y, Z);
 			px = vx, py = vy;
@@ -280,10 +355,9 @@ stock Float:GetVehiclePartAngle(vehicleid, part)
 	GetVehicleZAngle(vehicleid, a);
 	switch(part)
 	{
-		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;// Front tire
-		case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE: a += 90.0;// Right Front tire
-		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE: a -= 90.0;// Left Front tire
-		case VEH_PART_PCAP:
+		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;//Front Tire | Hood
+        	case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE,VEH_PART_RFSEAT,VEH_PART_RRSEAT: a += 90.0;//Right Front/Mid/Rear Tires | Right Front/Rear Seats
+        	case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE,VEH_PART_LFSEAT,VEH_PART_LRSEAT: a -= 90.0;//Left Front/Mid/Rear Tires | Left Front/Rear Seats
 		{
 			new cap = GetVehiclePetrolCapSide(vehicleid);
 			if(cap == 1) a += 90.0;
@@ -346,6 +420,10 @@ stock GetVehiclePartName(part)
 		case VEH_PART_LRTIRE: partname ="Left Rear Tire";
 		case VEH_PART_RMTIRE: partname ="Right Mid Tire";
 		case VEH_PART_LMTIRE: partname ="Left Mid Tire";
+		case VEH_PART_RFSEAT: partname ="Right Front Seat";
+		case VEH_PART_LFSEAT: partname ="Left Front Seat";
+		case VEH_PART_RRSEAT: partname ="Right Rear Seat";
+		case VEH_PART_LRSEAT: partname ="Left Rear Seat";
 		case VEH_PART_HOOD: partname ="Hood";
 		case VEH_PART_TRUNK: partname ="Trunk";
 		case VEH_PART_PCAP: partname ="Petrol Cap";
