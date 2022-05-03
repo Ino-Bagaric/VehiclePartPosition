@@ -1,22 +1,39 @@
 # VehiclePartPosition - SAMP
 
-## GetPosNearVehiclePart ##
+[![sampctl](https://img.shields.io/badge/sampctl-VehiclePartPosition-2f2f2f.svg?style=for-the-badge)](https://github.com/Ino-Bagaric/VehiclePartPosition)
+
+## Installation
+
+Simply install to your project:
+
+```bash
+sampctl package install Ino-Bagaric/VehiclePartPosition
+```
+
+Include in your code and begin using the library:
+
+```pawn
+#include <VehiclePartPosition>
+```  
+
+## Usage
+### GetPosNearVehiclePart
 Use this function to obtain the position in the world of a certain part of the vehicle, being able to define a distance between the part of the vehicle and the position in the world. You can use it to create a 3D text, checkpoint, pickup or object in that position.
 
-## GetVehiclePartPos ##
+### GetVehiclePartPos
 Use this function to obtain the position of a specific part of the vehicle. You can use it to attach 3D text or an object.
 
-## IsPlayerNearVehiclePart ##
+### IsPlayerNearVehiclePart
 Use this function to detect if a player is near a vehicle part.
 
-## SetPlayerNearVehiclePart ##
+### SetPlayerNearVehiclePart
 Use this function to teleport a player to the front a vehicle part.
 
-## GetVehiclePartName ##
+### GetVehiclePartName
 Use this function to get the vehicle part names.
 
-Examples:
-
+## Examples
+```pawn
 	new vehid=1,string[30]; //Change the vehid
 	SetPlayerNearVehiclePart(playerid, vehid, VEH_PART_PCAP);
 	format(string, sizeof(string),"~w~%s", GetVehiclePartName(VEH_PART_PCAP));
@@ -109,6 +126,6 @@ Examples:
   	Attach3DTextLabelToVehicle(vtext, GetPlayerVehicleID(playerid), pos[0], pos[1], pos[2]);
   	GetPosNearVehiclePart(GetPlayerVehicleID(playerid), VEH_PART_PCAP, pos[0], pos[1], pos[2],0.25);
   	CreateDynamicObject(1650, pos[0], pos[1], pos[2]-0.5, 0.0, 0.0, a);
-
+```
 ![Screenshot](screenshot1.png)
 ![Screenshot](screenshot2.png)
