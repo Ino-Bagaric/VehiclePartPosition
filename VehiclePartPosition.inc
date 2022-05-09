@@ -22,6 +22,9 @@
 
  	Changelog:
 
+	03-05-2022
+	* Add support for sampctl
+
  	30-10-2016:
  	* Initial release
 

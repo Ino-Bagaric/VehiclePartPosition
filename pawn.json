@@ -1,0 +1,10 @@
+{
+	"user": "Ino-Bagaric",
+	"repo": "VehiclePartPosition",
+	"tag": "2.0.0",
+	"entry": "test.pwn",
+	"output": "gamemodes/test.amx",
+	"dependencies": [
+		"pawn-lang/samp-stdlib"
+	]
+}
