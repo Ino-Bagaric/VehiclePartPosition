@@ -359,15 +359,15 @@ stock Float:GetVehiclePartAngle(vehicleid, part)
 	switch(part)
 	{
 		case VEH_PART_FTIRE,VEH_PART_HOOD: a -= 180.0;//Front Tire | Hood
-        	case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE,VEH_PART_RFSEAT,VEH_PART_RRSEAT: a += 90.0;//Right Front/Mid/Rear Tires | Right Front/Rear Seats
-        	case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE,VEH_PART_LFSEAT,VEH_PART_LRSEAT: a -= 90.0;//Left Front/Mid/Rear Tires | Left Front/Rear Seats
-					case VEH_PART_PCAP:
-					{
-						new cap = GetVehiclePetrolCapSide(vehicleid);
-						if (cap == 1) a += 90.0;
-						if (cap == 2) a -= 90.0;
-						if (cap == 4) a -= 180.0;
-					}
+		case VEH_PART_RFTIRE,VEH_PART_RRTIRE,VEH_PART_RMTIRE,VEH_PART_RFSEAT,VEH_PART_RRSEAT: a += 90.0;//Right Front/Mid/Rear Tires | Right Front/Rear Seats
+		case VEH_PART_LFTIRE,VEH_PART_LRTIRE,VEH_PART_LMTIRE,VEH_PART_LFSEAT,VEH_PART_LRSEAT: a -= 90.0;//Left Front/Mid/Rear Tires | Left Front/Rear Seats
+		case VEH_PART_PCAP:
+		{
+			new cap = GetVehiclePetrolCapSide(vehicleid);
+			if (cap == 1) a += 90.0;
+			if (cap == 2) a -= 90.0;
+			if (cap == 4) a -= 180.0;
+		}
 	}
 	return a;
 }
